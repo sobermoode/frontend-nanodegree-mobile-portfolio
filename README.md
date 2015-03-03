@@ -1,3 +1,74 @@
+
+index.html
+Original PageSpeed score: 28/100
+
+Research:
+Minification build tools
+- https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=minification%20build%20tools
+
+I did a Google search for build tools to help with minification and it suggested a plug-in to analyze HTML,
+	as well as tools for CSS and Javascript. I installed the PageSpeed Insights plug-in for Chrome.
+
+General improvements
+- http://www.smashingmagazine.com/2014/09/08/improving-smashing-magazine-performance-case-study/
+This case study of the redesign of the Smashing Magazine website walked through their entire process, 
+	from how their website was underperforming, their thoughts on how to fix it, the solutions they
+	came up with and why they worked.
+
+Browser caching
+- https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#defining-optimal-cache-control-policy
+- https://www.mnot.net/cache_docs/#IMP-SERVER
+
+I didn't understand how to properly set up browser caching. At first, I thought it was just another option
+	that could be included within a tag. For instance, setting the 'Cache-Control: private, max-age=600' on an image
+	so that it would be cached for ten minutes. But, apparently, the caching information needs to be included in the
+	header information and implementing it is different based on the type of server; it can also be accomplished
+	in different ways based on the scripting language used. I wasn't sure how to make it happen with my project
+	files on github.io.
+
+I worked on each improvement individually as per the suggestions given by the PageSpeed Insights plugin for Chrome:
+
+- Inlined print.css.
+- Inlined perfmatters.js.
+- Moved the inlined CSS and Javascript before the call to fetch the external CSS resource.
+- Scaled pizzeria.jpg.
+- Created non-compressed PNGs of all images and specified their widths and heights in the HTML.
+	Even after creating PNGs and selecting to have them interlaced (apparently, this makes a difference), the
+	PageSpeed plugin was still telling me that I needed to optimize the images to achieve a higher PageSpeed. I'm
+	not sure if this means there's another option to the PNGs that I need to set or if I should be using another
+	image format entirely.
+- Minified style.css and linked to the minified file in index.html.
+	This wasn't a suggestion made by the PageSpeed plugin and it didn't affect the score.
+
+Final PageSpeed score: 98/100
+
+pizza.html
+
+Research:
+I struggled mightily with this at first. I thought that both corrections to main.js (as outlined in the intro
+	comments) pertained to the FPS of the scrolling pizzas. I figured out the first optimization, but then spent
+	most of a day making further changes to updatePizzas() and not reducing my average time to generate the last
+	10 frames. Finally, I consulted the Project 4 office hours, which pointed out that the second fix
+	specifically pertained to the time to resize the pizzas after changing the slider.
+
+- Original average time to generate last 10 frames: 30-40ms
+	I looked at Ilya's demo (https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html) and
+	determined what (if anything) was being done differently there. What I noticed, was that calculating the
+	scrollTop value as part of calculating the phase value was taken out of the loop, so as only to be done once.
+	I moved this calculation out of the for loop and assigned it to the cachedScrollTop variable and used
+	cachedScrollTop when calculating the phase value. Although my average time to generate the last 10 frames was
+	still relatively high, this brought my timeline well within the 60fps mark.
+
+	Final average time to generate last 10 frames: 1-1.5ms
+
+- Original time to resize pizzas: 100+ms
+	I used a somewhat similar technique for this puzzle. I moved the calculation to determine the windowwidth (line 425),
+	and saved all the random pizzas to an array with one call (line 429) rather than get the "current pizza" with
+	every iteration through the loop. Then, since every random pizza had the same properties (or, rather, the image for
+	every pizza had the same dimensions), I just took the first pizza and used it as a template for the other 199 (line 462).
+	I passed that value into determineDx() (line 434) instead of the image for the "current pizza."
+
+	Final time to resize pizzas: 1.17ms
 ## Website Performance Optimization portfolio project
 
 Your challenge, if you wish to accept it (and we sure hope you will), is to optimize this online portfolio for speed! In particular, optimize the critical rendering path and make this page render as quickly as possible by applying the techniques you've picked up in the [Critical Rendering Path course](https://www.udacity.com/course/ud884).
