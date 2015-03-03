@@ -421,11 +421,18 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
+  // moved the windowwidth calculation outside the for loop
+  var windowwidth = document.querySelector("#randomPizzas").offsetWidth;
+
+  // made one call to document.querySelectorAll(".randomPizzaContainer"), so it also wasn't done
+  // continuously in the for loop
+  var allRandomPizzas = document.querySelectorAll(".randomPizzaContainer");
+
   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
-  function determineDx (elem, size) {
-    var oldwidth = elem.offsetWidth;
-    var windowwidth = document.querySelector("#randomPizzas").offsetWidth;
-    var oldsize = oldwidth / windowwidth;
+  // function now takes the old width of the pizza images instead of the actual image and making the calculation every
+  // time determineDx() is called.
+  function determineDx (old, size) {
+    var oldsize = old / windowwidth;
 
     // TODO: change to 3 sizes? no more xl?
     // Changes the slider value to a percent width
@@ -450,10 +457,13 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    // now using the allRandomPizzas array and calculating the offset only once;
+    // passing this value into determineDx() instead of the image
+    var oldwidth = allRandomPizzas[0].offsetWidth;
+    for (var i = 0; i < allRandomPizzas.length; i++) {
+      var dx = determineDx(oldwidth, size);
+      var newwidth = (oldwidth + dx) + 'px';
+      allRandomPizzas[i].style.width = newwidth;
     }
   }
 
@@ -502,11 +512,12 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
+  var cachedScrollTop = document.body.scrollTop;
+
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
-    /*var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';*/
-    items[i].style.left = items[i].basicLeft + 100 + 'px';
+    var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
