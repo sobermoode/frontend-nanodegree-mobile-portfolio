@@ -46,7 +46,7 @@ Final PageSpeed score: 98/100
 
 I had not been using ngrok to view my work; I was uploading my work-in-progress to GitHub Pages, thinking it would achieve the same effect. Apparently, it didn't. I had some trouble getting the python SimpleHTTPServer set up and getting ngrok to talk to it, but the ngrok documentation helped, and I figured it out after a little while.
 
-First I needed to optimize the web fonts. I read up on [Google's suggestions](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/webfont-optimization?hl=en#optimizing-loading-and-rendering) for inlining the font styling content, and did so. Then, I minified index.html. I also noticed that the Google Analytics code is inlined in the <head> and that there is another call to a Google Analytics Javascript file further on down. I removed the link to the second file. After these optimizations, the PageSpeed score was up to 95/100, through ngrok.
+First I needed to optimize the web fonts. I read up on [Google's suggestions](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/webfont-optimization?hl=en#optimizing-loading-and-rendering) for inlining the font styling content, and did so. Then, I minified index.html. I also noticed that the Google Analytics code is inlined in the head content and that there is another call to a Google Analytics Javascript file further on down. I removed the link to the second file. After these optimizations, the PageSpeed score was up to 95/100, through ngrok.
 
 Fingers crossed that this has done it!!!
 
