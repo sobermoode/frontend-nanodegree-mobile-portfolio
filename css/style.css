@@ -1,3 +1,18 @@
+
+@font-face
+{
+  font-family: OpenSans;
+  src: url( opensans400.woff2 );
+  font-weight: normal;
+}
+
+@font-face
+{
+  font-family: OpenSans;
+  src: url( opensans700.woff2 );
+  font-weight: bold;
+}
+
 html {
   font-size: 100%;
   overflow-y: scroll;
